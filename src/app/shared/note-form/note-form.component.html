@@ -1,7 +1,26 @@
-<div class="note-form">
-  <form [formGroup]="noteForm" (ngSubmit)="onSubmit()">
-    <input formControlName="title" placeholder="Note Title" type="text">
-    <textarea formControlName="description" placeholder="Write your note..." rows="4"></textarea>
-    <button type="submit" [disabled]="!noteForm.valid">Add Note</button>
+<div class="note-form-container">
+  <form [formGroup]="noteForm" (ngSubmit)="onSubmit()" class="note-form">
+    <div class="form-content">
+      <input 
+        formControlName="title" 
+        placeholder="Title" 
+        class="note-input"
+        type="text"
+        (click)="expandForm()"
+        (focus)="expandForm()">
+    </div>
+    
+    <textarea 
+      *ngIf="isExpanded"
+      formControlName="description" 
+      placeholder="Take a note..." 
+      class="note-textarea"
+      rows="3"></textarea>
+    
+    <div *ngIf="isExpanded" class="form-footer"> 
+      <button type="submit" class="close-btn">
+        Close
+      </button>
+    </div>
   </form>
 </div>

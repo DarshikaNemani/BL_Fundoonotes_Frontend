@@ -1,107 +1,109 @@
 .note-card {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background-color: #202124;
+  border: 1px solid #5f6368;
   border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s ease;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  break-inside: avoid;
 
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  .view-mode {
-    h3 {
-      margin: 0 0 0.5rem 0;
-      color: #333;
-      font-size: 1.1rem;
-      word-wrap: break-word;
-    }
+  &:hover .note-actions {
+    opacity: 1;
+  }
 
-    p {
-      margin: 0 0 1rem 0;
-      color: #666;
-      line-height: 1.4;
-      word-wrap: break-word;
+  &.editing {
+    cursor: default;
+    
+    .note-actions {
+      opacity: 1;
+    }
+  }
+}
+
+.note-content {
+  min-height: 60px;
+}
+
+.note-title {
+  color: #e8eaed;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.note-description {
+  color: #e8eaed;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.edit-content {
+  .edit-title {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #e8eaed;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    outline: none;
+    
+    &::placeholder {
+      color: #9aa0a6;
     }
   }
 
-  .edit-mode {
-    .edit-title {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-      font-weight: bold;
-      
-      &:focus {
-        outline: none;
-        border-color: #2196f3;
-      }
-    }
-
-    .edit-description {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-      resize: vertical;
-      font-family: inherit;
-      
-      &:focus {
-        outline: none;
-        border-color: #2196f3;
-      }
+  .edit-description {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #e8eaed;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    
+    &::placeholder {
+      color: #9aa0a6;
     }
   }
+}
 
-  .note-actions, .edit-actions {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
+.note-actions {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 
-    button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background-color 0.2s ease;
+  &.visible {
+    opacity: 1;
+  }
+}
 
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
+.action-btn {
+  background: none;
+  border: none;
+  color: #9aa0a6;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-      &.edit-btn, &.save-btn {
-        background: #2196f3;
-        color: white;
-
-        &:hover:not(:disabled) {
-          background: #1976d2;
-        }
-      }
-
-      &.delete-btn {
-        background: #f44336;
-        color: white;
-
-        &:hover {
-          background: #d32f2f;
-        }
-      }
-
-      &.cancel-btn {
-        background: #757575;
-        color: white;
-
-        &:hover {
-          background: #616161;
-        }
-      }
-    }
+  &:hover {
+    background-color: #313235;
+    color: #e8eaed;
   }
 }

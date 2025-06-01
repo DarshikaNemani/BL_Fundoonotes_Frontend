@@ -32,7 +32,6 @@ export class NotesService {
       throw new Error('No authentication token found');
     }
     
-    // Don't set Content-Type for multipart/form-data, let browser set it with boundary
     return new HttpHeaders({
       'Authorization': token
     });
@@ -63,7 +62,6 @@ export class NotesService {
     });
   }
 
-  // Soft delete - mark note as deleted
   deleteNote(noteId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/notes/trashNotes/${noteId}`, {
       headers: this.getHeaders()

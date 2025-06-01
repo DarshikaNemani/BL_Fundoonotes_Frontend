@@ -12,18 +12,39 @@ import { CommonModule } from '@angular/common';
 export class NoteFormComponent {
   @Output() noteAdded = new EventEmitter<any>();
   noteForm: FormGroup;
+  isExpanded = false;
 
   constructor(private fb: FormBuilder) {
     this.noteForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required]
+      title: [''],
+      description: ['']
     });
   }
 
+  expandForm(): void {
+    this.isExpanded = true;
+  }
+
   onSubmit(): void {
-    if (this.noteForm.valid) {
-      this.noteAdded.emit(this.noteForm.value);
+    const formValue = this.noteForm.value;
+    
+    if (formValue.title?.trim() || formValue.description?.trim()) {
+      const noteData = {
+        title: formValue.title?.trim() || '',
+        description: formValue.description?.trim() || ''
+      };
+      
+      this.noteAdded.emit(noteData);
       this.noteForm.reset();
+      this.isExpanded = false;
+    } else {
+
+      this.isExpanded = false;
     }
+  }
+
+  closeForm(): void {
+    this.isExpanded = false;
+    this.noteForm.reset();
   }
 }

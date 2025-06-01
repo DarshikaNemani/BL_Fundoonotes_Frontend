@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 export class AuthFormComponent {
   authForm: FormGroup;
   isLoginMode = true;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -45,6 +46,10 @@ export class AuthFormComponent {
     this.authForm = this.createForm();
   }
 
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit(): void {
     if (this.authForm.valid) {
       if (this.isLoginMode) {
@@ -55,25 +60,24 @@ export class AuthFormComponent {
     }
   }
 
-login(): void {
-  const loginData = {
-    ...this.authForm.value,
-    service: 'advance'
-  };
-  
-  this.authService.login(loginData).subscribe({
-    next: (response) => {
-      console.log('Login successful:', response);
-      this.authService.setToken(response.id);
-      this.router.navigate(['/']);
-    },
-    error: (error) => {
-      console.error('Login failed:', error);
-      alert('Login failed. Please check your credentials.');
-    }
-  });
-}
-
+  login(): void {
+    const loginData = {
+      ...this.authForm.value,
+      service: 'advance'
+    };
+    
+    this.authService.login(loginData).subscribe({
+      next: (response) => {
+        console.log('Login successful:', response);
+        this.authService.setToken(response.id);
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Login failed:', error);
+        alert('Login failed. Please check your credentials.');
+      }
+    });
+  }
 
   signup(): void {
     const signupData = {

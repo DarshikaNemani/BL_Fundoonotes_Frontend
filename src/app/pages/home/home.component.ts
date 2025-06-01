@@ -32,8 +32,7 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         console.log('Notes response:', response);
         this.allNotes = response.data?.data || [];
-        
-        // Filter out deleted notes (only show notes where isDeleted is false)
+
         this.notes = this.allNotes.filter(note => !note.isDeleted);
         
         console.log('All notes:', this.allNotes);
@@ -47,7 +46,7 @@ export class HomeComponent implements OnInit {
     this.notesService.createNote(noteData).subscribe({
       next: (response) => {
         console.log('Note added:', response);
-        this.loadNotes(); // Reload to get updated list
+        this.loadNotes();
       },
       error: (error) => console.error('Failed to add note:', error)
     });
@@ -60,15 +59,12 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         console.log('Note updated:', response);
         
-        // Update the local note in the array
         const noteIndex = this.notes.findIndex(note => note.id === updateData.noteId);
         if (noteIndex !== -1) {
           this.notes[noteIndex].title = updateData.title;
           this.notes[noteIndex].description = updateData.description;
         }
         
-        // Optionally reload all notes to get fresh data
-        // this.loadNotes();
       },
       error: (error) => {
         console.error('Failed to update note:', error);
@@ -84,7 +80,6 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         console.log('Note moved to trash:', response);
         
-        // Update the local notes array to remove the deleted note
         this.notes = this.notes.filter(note => note.id !== noteId);
       },
       error: (error) => {

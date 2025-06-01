@@ -1,13 +1,16 @@
 <app-navbar></app-navbar>
-<div class="home-container">
+
+<main class="main-content">
   <app-note-form (noteAdded)="addNote($event)"></app-note-form>
   
-  <div class="notes-grid">
-    <app-note-card 
-      *ngFor="let note of notes" 
-      [note]="note"
-      (editNote)="editNote($event)"
-      (deleteNote)="deleteNote($event)">
-    </app-note-card>
+  <div class="notes-container">
+    <div class="notes-masonry">
+      <app-note-card 
+        *ngFor="let note of notes" 
+        [note]="note"
+        (editNote)="editNote($event)"
+        (deleteNote)="deleteNote($event)">
+      </app-note-card>
+    </div>
   </div>
-</div>
+</main>
