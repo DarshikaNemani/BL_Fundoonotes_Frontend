@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NotesService } from '../../services/notes.service';
 import { Note } from '../../models/note.model';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
@@ -7,23 +8,36 @@ import { NoteFormComponent } from '../../shared/note-form/note-form.component';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [CommonModule, NavbarComponent, NoteCardComponent, NoteFormComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  imports: [NavbarComponent, NoteCardComponent, NoteFormComponent]
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   notes: Note[] = [];
+  allNotes: Note[] = [];
 
-  constructor(private notesService: NotesService) {}
+  constructor(private notesService: NotesService) {
+    console.log('HomeComponent constructor called');
+  }
 
   ngOnInit(): void {
+    console.log('HomeComponent ngOnInit called');
     this.loadNotes();
   }
 
   loadNotes(): void {
+    console.log('loadNotes() method called');
     this.notesService.getAllNotes().subscribe({
       next: (response) => {
-        this.notes = response.data?.data || [];
+        console.log('Notes response:', response);
+        this.allNotes = response.data?.data || [];
+        
+        // Filter out deleted notes (only show notes where isDeleted is false)
+        this.notes = this.allNotes.filter(note => !note.isDeleted);
+        
+        console.log('All notes:', this.allNotes);
+        console.log('Active notes (not deleted):', this.notes);
       },
       error: (error) => console.error('Failed to load notes:', error)
     });
@@ -32,22 +46,51 @@ export class HomeComponent implements OnInit {
   addNote(noteData: any): void {
     this.notesService.createNote(noteData).subscribe({
       next: (response) => {
-        this.loadNotes();
+        console.log('Note added:', response);
+        this.loadNotes(); // Reload to get updated list
       },
       error: (error) => console.error('Failed to add note:', error)
     });
   }
 
-  editNote(note: Note): void {
-    console.log('Edit note:', note);
+  editNote(updateData: {noteId: string, title: string, description: string}): void {
+    console.log('Updating note:', updateData);
+    
+    this.notesService.updateNote(updateData.noteId, updateData.title, updateData.description).subscribe({
+      next: (response) => {
+        console.log('Note updated:', response);
+        
+        // Update the local note in the array
+        const noteIndex = this.notes.findIndex(note => note.id === updateData.noteId);
+        if (noteIndex !== -1) {
+          this.notes[noteIndex].title = updateData.title;
+          this.notes[noteIndex].description = updateData.description;
+        }
+        
+        // Optionally reload all notes to get fresh data
+        // this.loadNotes();
+      },
+      error: (error) => {
+        console.error('Failed to update note:', error);
+        alert('Failed to update note. Please try again.');
+      }
+    });
   }
 
   deleteNote(noteId: string): void {
+    console.log('Deleting note with ID:', noteId);
+    
     this.notesService.deleteNote(noteId).subscribe({
       next: (response) => {
-        this.loadNotes();
+        console.log('Note moved to trash:', response);
+        
+        // Update the local notes array to remove the deleted note
+        this.notes = this.notes.filter(note => note.id !== noteId);
       },
-      error: (error) => console.error('Failed to delete note:', error)
+      error: (error) => {
+        console.error('Failed to delete note:', error);
+        alert('Failed to delete note. Please try again.');
+      }
     });
   }
 }

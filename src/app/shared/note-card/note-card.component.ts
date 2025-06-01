@@ -1,18 +1,45 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Note } from '../../models/note.model';
 
 @Component({
   selector: 'app-note-card',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './note-card.component.html',
   styleUrls: ['./note-card.component.scss']
 })
 export class NoteCardComponent {
   @Input() note!: Note;
-  @Output() editNote = new EventEmitter<Note>();
+  @Output() editNote = new EventEmitter<{noteId: string, title: string, description: string}>();
   @Output() deleteNote = new EventEmitter<string>();
 
+  isEditing = false;
+  editTitle = '';
+  editDescription = '';
+
   onEdit(): void {
-    this.editNote.emit(this.note);
+    this.isEditing = true;
+    this.editTitle = this.note.title;
+    this.editDescription = this.note.description;
+  }
+
+  onSave(): void {
+    if (this.editTitle.trim() && this.editDescription.trim() && this.note.id) {
+      this.editNote.emit({
+        noteId: this.note.id,
+        title: this.editTitle.trim(),
+        description: this.editDescription.trim()
+      });
+      this.isEditing = false;
+    }
+  }
+
+  onCancel(): void {
+    this.isEditing = false;
+    this.editTitle = '';
+    this.editDescription = '';
   }
 
   onDelete(): void {

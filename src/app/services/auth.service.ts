@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return this.tokenSubject.value;
+    return localStorage.getItem('token');
   }
 
   logout(): void {

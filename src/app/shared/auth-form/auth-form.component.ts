@@ -55,24 +55,25 @@ export class AuthFormComponent {
     }
   }
 
-  login(): void {
-    const loginData = {
-      ...this.authForm.value,
-      service: 'advance'
-    };
-    
-    this.authService.login(loginData).subscribe({
-      next: (response) => {
-        console.log('Login successful:', response);
-        this.authService.setToken(response.id);
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error('Login failed:', error);
-        alert('Login failed. Please check your credentials.');
-      }
-    });
-  }
+login(): void {
+  const loginData = {
+    ...this.authForm.value,
+    service: 'advance'
+  };
+  
+  this.authService.login(loginData).subscribe({
+    next: (response) => {
+      console.log('Login successful:', response);
+      this.authService.setToken(response.id);
+      this.router.navigate(['/']);
+    },
+    error: (error) => {
+      console.error('Login failed:', error);
+      alert('Login failed. Please check your credentials.');
+    }
+  });
+}
+
 
   signup(): void {
     const signupData = {
@@ -85,7 +86,7 @@ export class AuthFormComponent {
       next: (response) => {
         console.log('Signup successful:', response);
         alert('Signup successful! Please login.');
-        this.toggleMode(); // Switch to login mode
+        this.toggleMode();
       },
       error: (error) => {
         console.error('Signup failed:', error);
