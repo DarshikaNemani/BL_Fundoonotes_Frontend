@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { User, LoginRequest } from '../models/user.model';
+import { SignupRequest, LoginRequest } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class AuthService {
   
   constructor(private http: HttpClient) {}
 
-  signup(user: User): Observable<any> {
+  signup(user: SignupRequest): Observable<any> {
     return this.http.post(`${this.baseUrl}/user/userSignUp`, user);
   }
 

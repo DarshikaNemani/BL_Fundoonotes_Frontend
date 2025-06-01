@@ -24,12 +24,20 @@ export class AuthFormComponent {
   }
 
   createForm(): FormGroup {
-    return this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+    if (this.isLoginMode) {
+      return this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]]
+      });
+    } else {
+      return this.fb.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        phoneNumber: ['', Validators.required]
+      });
+    }
   }
 
   toggleMode(): void {
@@ -48,23 +56,41 @@ export class AuthFormComponent {
   }
 
   login(): void {
-    const { email, password } = this.authForm.value;
-    this.authService.login({ email, password }).subscribe({
+    const loginData = {
+      ...this.authForm.value,
+      service: 'advance'
+    };
+    
+    this.authService.login(loginData).subscribe({
       next: (response) => {
+        console.log('Login successful:', response);
         this.authService.setToken(response.id);
         this.router.navigate(['/']);
       },
-      error: (error) => console.error('Login failed:', error)
+      error: (error) => {
+        console.error('Login failed:', error);
+        alert('Login failed. Please check your credentials.');
+      }
     });
   }
 
   signup(): void {
-    this.authService.signup(this.authForm.value).subscribe({
+    const signupData = {
+      ...this.authForm.value,
+      service: 'advance',
+      role: 'user'
+    };
+    
+    this.authService.signup(signupData).subscribe({
       next: (response) => {
         console.log('Signup successful:', response);
-        this.toggleMode();
+        alert('Signup successful! Please login.');
+        this.toggleMode(); // Switch to login mode
       },
-      error: (error) => console.error('Signup failed:', error)
+      error: (error) => {
+        console.error('Signup failed:', error);
+        alert('Signup failed. Please try again.');
+      }
     });
   }
 }
