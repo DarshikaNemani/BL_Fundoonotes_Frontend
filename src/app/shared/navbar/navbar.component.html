@@ -1,0 +1,8 @@
+<nav class="navbar">
+  <div class="nav-brand">
+    <h2>FundooNotes</h2>
+  </div>
+  <div class="nav-actions" *ngIf="authService.isLoggedIn()">
+    <button (click)="logout()" class="logout-btn">Logout</button>
+  </div>
+</nav>

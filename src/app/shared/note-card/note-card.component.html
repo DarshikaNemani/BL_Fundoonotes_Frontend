@@ -1,0 +1,8 @@
+<div class="note-card">
+  <h3>{{ note.title }}</h3>
+  <p>{{ note.description }}</p>
+  <div class="note-actions">
+    <button (click)="onEdit()" class="edit-btn">Edit</button>
+    <button (click)="onDelete()" class="delete-btn">Delete</button>
+  </div>
+</div>

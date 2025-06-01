@@ -1,0 +1,7 @@
+<div class="note-form">
+  <form [formGroup]="noteForm" (ngSubmit)="onSubmit()">
+    <input formControlName="title" placeholder="Note Title" type="text">
+    <textarea formControlName="description" placeholder="Write your note..." rows="4"></textarea>
+    <button type="submit" [disabled]="!noteForm.valid">Add Note</button>
+  </form>
+</div>
